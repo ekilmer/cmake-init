@@ -54,15 +54,14 @@ set(
 )
 mark_as_advanced(%(name)s_INSTALL_CMAKEDIR)
 
-install(
-    FILES cmake/install-config.cmake
-    DESTINATION "${%(name)s_INSTALL_CMAKEDIR}"
-    RENAME "${package}Config.cmake"
-    COMPONENT %(name)s_Development
+configure_package_config_file(cmake/install-config.cmake
+    "${PROJECT_BINARY_DIR}/${package}Config.cmake"
+    INSTALL_DESTINATION "${%(name)s_INSTALL_CMAKEDIR}"
 )
 
 install(
     FILES "${PROJECT_BINARY_DIR}/${package}ConfigVersion.cmake"
+          "${PROJECT_BINARY_DIR}/${package}Config.cmake"
     DESTINATION "${%(name)s_INSTALL_CMAKEDIR}"
     COMPONENT %(name)s_Development
 )
@@ -72,6 +71,11 @@ install(
     NAMESPACE %(name)s::
     DESTINATION "${%(name)s_INSTALL_CMAKEDIR}"
     COMPONENT %(name)s_Development
+)
+
+export(EXPORT %(name)sTargets
+    FILE "${PROJECT_BINARY_DIR}/%(name)sTargets.cmake"
+    NAMESPACE %(name)s::
 )
 
 if(PROJECT_IS_TOP_LEVEL)
